@@ -1,0 +1,51 @@
+<ng-container
+  *ngIf="
+    filterForm && filterBarService.filterBarSettingsDataAsObservable()
+      | async as filterBarData
+  "
+>
+  <form [formGroup]="filterForm" id="securitiesFilterBarForm" class="container">
+    <ng-container *ngIf="filterForm.get('name') as nameTextControl">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" id="nameInput" />
+        <mat-icon
+          matSuffix
+          class="clickable"
+          *ngIf="nameTextControl.value.length > 0"
+          (click)="nameTextControl.setValue('')"
+          >close</mat-icon
+        >
+      </mat-form-field>
+    </ng-container>
+
+    <mat-form-field appearance="fill" *ngIf="filterForm.get('types')">
+      <mat-label>Types</mat-label>
+      <mat-select formControlName="types" multiple id="typesSelect">
+        <mat-option
+          *ngFor="let typesOption of filterBarData.types"
+          [value]="typesOption"
+          >{{ typesOption }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="filterForm.get('currencies')">
+      <mat-label>Currencies</mat-label>
+      <mat-select formControlName="currencies" multiple id="currenciesSelect">
+        <mat-option
+          *ngFor="let currenciesOption of filterBarData.currencies"
+          [value]="currenciesOption"
+          >{{ currenciesOption }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox
+      *ngIf="filterForm.get('isPrivate')"
+      formControlName="isPrivate"
+      id="privateCheckbox"
+      >Private</mat-checkbox
+    >
+  </form>
+</ng-container>
